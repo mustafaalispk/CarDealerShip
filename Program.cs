@@ -1,6 +1,9 @@
 ﻿using CarDealerShip.Data;
 using CarDealerShip.Domain.Model;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using static System.Console;
 
 namespace CarDealerShip
@@ -8,7 +11,7 @@ namespace CarDealerShip
     class Program
     {
         static string connectionString = "Server=.;Database=CarDealerShip;Trusted_Connection=True";
-
+         
         static CarDealerShipContext context = new CarDealerShipContext(connectionString);
         static void Main(string[] args)
         {
@@ -34,7 +37,7 @@ namespace CarDealerShip
 
                     case ConsoleKey.D2:
 
-                        DisplayRegistry();
+                        DisplayRegistry();                       
 
                         break;
 
@@ -46,13 +49,33 @@ namespace CarDealerShip
 
 
                 }
+
+                Clear();
             }
 
         }
 
         private static void DisplayRegistry()
         {
-            throw new NotImplementedException();
+            // Här vi hämtar alla car från databasen.
+
+            List<Car> carList = context.Car.ToList();
+
+            Write("Reg.nr".PadRight(10, ' '));
+            Write("Märke".PadRight(10, ' '));
+            Write("Model".PadRight(10, ' '));
+            Write("Tillv.år".PadRight(10, ' '));
+            WriteLine("Pris");
+
+            foreach (Car car in carList)
+            {
+                Write(car.RegistrationNumber.PadRight(10, ' '));
+                Write(car.Brand.PadRight(10, ' '));
+                Write(car.Model.PadRight(10, ' '));
+                Write(car.MakeYear.PadRight(10, ' '));
+                WriteLine(car.Price);
+            }
+            ReadKey(true);
         }
 
         private static void RegisterCar()
@@ -63,7 +86,7 @@ namespace CarDealerShip
             {
                 Clear();
 
-                WriteLine("Registrationnummer: ");
+                Write("Registrationnummer: ");
 
                 string registrationNumber = ReadLine();
 
@@ -81,7 +104,7 @@ namespace CarDealerShip
 
                 Write("Pris: ");
 
-                string price = ReadLine();
+                decimal price = decimal.Parse(ReadLine());
 
                 WriteLine();
 
@@ -105,6 +128,10 @@ namespace CarDealerShip
 
                     SaveCar(car);
 
+                    WriteLine("Bil registrerad");
+
+                    Thread.Sleep(2000);
+
                     isCorrect = true;
                 }
             } while (!isCorrect);
@@ -112,7 +139,11 @@ namespace CarDealerShip
 
         private static void SaveCar(Car car)
         {
-           
+            context.Car.Add(car);
+
+            context.SaveChanges();           
+
         }
+      
     }
 }

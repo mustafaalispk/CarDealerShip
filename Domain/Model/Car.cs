@@ -6,7 +6,7 @@ namespace CarDealerShip.Domain.Model
 {
     class Car
     {
-        public Car(string registrationNumber, string brand, string model, string makeYear, string price)
+        public Car(string registrationNumber, string brand, string model, string makeYear, decimal price)
         {
             RegistrationNumber = registrationNumber;
             Brand = brand;
@@ -20,6 +20,6 @@ namespace CarDealerShip.Domain.Model
         public string Brand { get; protected set; }
         public string Model { get; protected set; }
         public string MakeYear { get; protected set; }
-        public string Price { get; protected set; }
+        public decimal Price { get; protected set; }
     }
 }
